@@ -292,7 +292,9 @@ HandleFlash (
   }
 
   SparseHeader = (SPARSE_HEADER *)mDataBuffer;
+  DEBUG ((DEBUG_ERROR, "Sparse Magic: 0x%x \n", SparseHeader->Magic));
   if (SparseHeader->Magic == SPARSE_HEADER_MAGIC) {
+    DEBUG ((DEBUG_ERROR, "Is Sparse Image \n"));
     DEBUG ((DEBUG_INFO, "Sparse Magic: 0x%x Major: %d Minor: %d fhs: %d chs: %d bs: %d tbs: %d tcs: %d checksum: %d \n",
                 SparseHeader->Magic, SparseHeader->MajorVersion, SparseHeader->MinorVersion,  SparseHeader->FileHeaderSize,
                 SparseHeader->ChunkHeaderSize, SparseHeader->BlockSize, SparseHeader->TotalBlocks,
@@ -304,6 +306,7 @@ HandleFlash (
     }
     Status = FlashSparseImage (PartitionName, SparseHeader);
   } else {
+    DEBUG ((DEBUG_ERROR, "Is NOT Sparse Image, call OPP->FlashPartition() \n"));
     Status = mPlatform->FlashPartition (
                           PartitionName,
                           mNumDataBytes,
